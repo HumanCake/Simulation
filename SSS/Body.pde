@@ -4,7 +4,12 @@ class Body {
   PVectorD accelleration;                               //Acceleration doubles vector
   double mass;                                          //Mass (double) of body
   color c;                                              //Color of body
+<<<<<<< HEAD:SSS/Body.pde
   float size;                                           //Size of the body (Not to scale)
+=======
+  float size;                                           //Size of the body (Not to scale)//
+  int animationSpeed = 100000;
+>>>>>>> SpaceAndOrbits/master:SSS/Body.pde
  
   Body(PVectorD location, PVectorD speed,       //Constructor for any body
   double mass, color c,  float size) {          //"this" here refers to the current body object

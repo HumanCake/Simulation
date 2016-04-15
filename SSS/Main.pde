@@ -1,23 +1,10 @@
 // Simulation of gravitational effect v.3.d (Now with ALL THE COMMENTS!)
 // Computer science project RUC spring 2016
-
-ArrayList<Body> bodieSystem = new ArrayList<Body>();
+Body[] bodieSystem;                                                //Create array for bodies
 float G = 6.67408e-11;                                             //Gravitational constant (m^3 * kg * s^-2)
 static int z = -240;
 static int xi = 500;
 static int yi = 500;
-static int calculationSpeed = 100;
-int animationSpeed = 200;
-int year = 0;
-float yearTime = 0;
-float monthTime = 0;
-float dayTime = 0;
-float hourTime = 0;
-int month = 1;
-int day = 0;
-int hour = 0;
-
-PFont f;
 
 void setup() {
   size(800,600,P3D); //Size of the window
@@ -27,30 +14,27 @@ void setup() {
   int x0 = width/2;                                                //Width calculations
   int y0 = height/2;                                               //Hight calculations
   
-  f = createFont("Arial", 16, true);
+  PVectorD locationA = new PVectorD(x0 + 149598023e3, y0);         // Initial location: Earth (m)
+  PVectorD locationB = new PVectorD(x0 + 149598023e3+384780e3,y0); // initial location: Moon (m)
+  PVectorD locationC = new PVectorD(x0, y0);                       // initial location: Sun (m)
+  PVectorD locationD = new PVectorD(x0 + 227920000e3, y0);         // initial location: Mars (m)
+  PVectorD locationE = new PVectorD(x0 + 57909050e3, y0);          // initial location: Mercury (m)
+  PVectorD locationF = new PVectorD(x0 + 108208000e3, y0);         // initial location: Venus (m)
+  PVectorD locationG = new PVectorD(x0 + 778570000e3, y0);         // initial location: Jupiter (m)
+  PVectorD locationH = new PVectorD(x0 + 1433530000e3, y0);        // initial location: Saturn (m)
+  PVectorD locationI = new PVectorD(x0 + 2872460000e3, y0);        // initial location: Uranus (m)
+  PVectorD locationJ = new PVectorD(x0 + 4495060000e3, y0);        // initial location: Neptune (m)
   
-  PVectorD locationA = new PVectorD(x0   -2.521092863852298E+10, y0 +1.449279195712076E+11, -6.164888475164771E+05);         // Initial location: Earth (m)
-  PVectorD locationB = new PVectorD(x0 -2.552857888050620E+10, y0 +1.446860363961675E+11, 3.593933517466486E+07);           // initial location: Moon (m)
-  PVectorD locationC = new PVectorD(x0, y0);                                                                               // initial location: Sun (m)
-  PVectorD locationD = new PVectorD(x0 + 2.079950549908331E+11, y0 - 3.143009561106971E+09, -5.178781160069674E+09);         // initial location: Mars (m)
-  PVectorD locationE = new PVectorD(x0 -2.105262111032039E+10, y0 - 6.640663808353403E+10, -3.492446023382954E+09);          // initial location: Mercury (m)
-  PVectorD locationF = new PVectorD(x0 - 1.075055502695123E+11, y0 - 3.366520720591562E+09, 6.159219802771119E+09);         // initial location: Venus (m)
-  PVectorD locationG = new PVectorD(x0 + 5.989091594973032E+11, y0 + 4.391225931530510E+11, -1.523254614945272E+10);         // initial location: Jupiter (m)
-  PVectorD locationH = new PVectorD(x0 + 9.587063368200246E+11, y0 + 9.825652109121954E+11, -5.522065682385063E+10);        // initial location: Saturn (m)
-  PVectorD locationI = new PVectorD(x0 +2.158774703477132E+12, y0 - 2.054825231595053E+12, -3.562348723541665E+10);        // initial location: Uranus (m)
-  PVectorD locationJ = new PVectorD(x0 + 2.514853420151505E+12, y0 - 3.738847412364252E+12, 1.903947325211763E+10);        // initial location: Neptune (m)
-
-  PVectorD speedA = new PVectorD(-2.983983333368269E+04, -5.207633918704476E+03, 6.169062303484907E-02);                       // Earth speed (m/s)
-  PVectorD speedB = new PVectorD(-2.927904627038706E+04, -6.007566180814270E+03, -1.577640655646029E-00);                  // Moon speed (m/s)
-  PVectorD speedC = new PVectorD(0, 0);                                                                                   // Sun Speed (m/s)
-  PVectorD speedD = new PVectorD(1.295003532851602E+03, 2.629442067068712E+04, 5.190097267545717E+02);                        // Mars speed (m/s)
-  PVectorD speedE = new PVectorD(3.665298706393840E+04, -1.228983810111077E+04, -4.368172898981951E+03);                        // Mercury speed (m/s)
-  PVectorD speedF = new PVectorD(8.891598046362434E+02, -3.515920774124290E+04, -5.318594054684045E+02);                        // Venus speed (m/s)
-  PVectorD speedG = new PVectorD( -7.901937610713569E+03, 1.116317695450082E+04, 1.306729070868444E+02);                        // Jupiter speed (m/s)
-  PVectorD speedH = new PVectorD(-7.428885683466339E+03, 6.738814237717373E+03,  1.776643613880609E+02);                         // Saturn speed (m/s)
-  PVectorD speedI = new PVectorD(4.637648411798584E+03, 4.627192877193528E+03, -4.285025663198061E+01);                         // Uranus speed (m/s)
-  PVectorD speedJ = new PVectorD(4.465799984073191E+03, 3.075681163952201E+03, -1.665654118310400E+02);                         // Neptune speed (m/s)
-
+  PVectorD speedA = new PVectorD(0, 29780);                       // Earth speed (m/s)
+  PVectorD speedB = new PVectorD(0, 1022+29780);                  // Moon speed (m/s)
+  PVectorD speedC = new PVectorD(0, 0);                           // Sun Speed (m/s)
+  PVectorD speedD = new PVectorD(0,24077);                        // Mars speed (m/s)
+  PVectorD speedE = new PVectorD(0,47362);                        // Mercury speed (m/s)
+  PVectorD speedF = new PVectorD(0,35020);                        // Venus speed (m/s)
+  PVectorD speedG = new PVectorD(0,13070);                        // Jupiter speed (m/s)
+  PVectorD speedH = new PVectorD(0,9690);                         // Saturn speed (m/s)
+  PVectorD speedI = new PVectorD(0,6800);                         // Uranus speed (m/s)
+  PVectorD speedJ = new PVectorD(0,5430);                         // Neptune speed (m/s)
   
   double massA = 5.97219e24;                                       // Earth mass (kg)
   double massB = 7.34767309e22;                                    // Moon mass (kg)
@@ -98,84 +82,59 @@ void setup() {
   Body bodyI = new Body(locationI, speedI, massI, colorI, FsizeI);     //Values for Uranus -> constructor
   Body bodyJ = new Body(locationJ, speedJ, massJ, colorJ, FsizeJ);     //Values for Neptune -> constructor
   
-  bodieSystem.add(bodyA);                                          //Puts Earth in array
-  bodieSystem.add(bodyB);                                          //Puts Moon in an array
-  bodieSystem.add(bodyC);                                          //Puts Sun in an array
-  bodieSystem.add(bodyD);                                          //MARS
-  bodieSystem.add(bodyE);                                          //MURCURY
-  bodieSystem.add(bodyF);                                          //VENUS
-  bodieSystem.add(bodyG);                                          //JUPITER
-  bodieSystem.add(bodyH);                                          //SATURN
-  bodieSystem.add(bodyI);                                          //URANUS
-  bodieSystem.add(bodyJ);                                          //NEPTUNE
+  bodieSystem = new Body[10];                                       //Initialize array for bodies
+  
+  bodieSystem[0] = bodyA;                                          //Puts Earth in array
+  bodieSystem[1] = bodyB;                                          //Puts Moon in an array
+  bodieSystem[2] = bodyC;                                          //Puts Sun in an array
+  bodieSystem[3] = bodyD;                                          //MARS
+  bodieSystem[4] = bodyE;                                          //MURCURY
+  bodieSystem[5] = bodyF;                                          //VENUS
+  bodieSystem[6] = bodyG;                                          //JUPITER
+  bodieSystem[7] = bodyH;                                          //SATURN
+  bodieSystem[8] = bodyI;                                          //URANUS
+  bodieSystem[9] = bodyJ;                                          //NEPTUNE
 }
-
+  
+  animationSpeed = 200;
 void draw() {                                                    //Draw function calls itself over and over
   background(0,0,50,5);                                                 //Background, omit to see tails of bodies
   Move();
   
   for (int i = 0; i < animationSpeed; i++) {
-  yearTime = yearTime + 1 + calculationSpeed;
-  monthTime = monthTime + 1 + calculationSpeed;
-  dayTime = dayTime + 1 + calculationSpeed;
-  hourTime = hourTime + 1 + calculationSpeed;
-    for (int j = 0; j < bodieSystem.size(); j++){                    //For loop that goes throughh all bodies
-       bodieSystem.get(j).updateLocation();                              //Update location for all bodies
+    for (int j = 0; j < bodieSystem.length; j++){                    //For loop that goes throughh all bodies
+       bodieSystem[j].updateLocation();                              //Update location for all bodies
+      bodieSystem[j].drawBody();                                    //Draw all bodies in the window
     }
   }
-  for (int i = 0; i < bodieSystem.size(); i++) {
-  bodieSystem.get(i).drawBody();                                    //Draw all bodies in the window
-  }
-
   println("Framerate: "+frameRate);
-
-  if(yearTime > 31556926) {
-  yearTime = yearTime - 31556926;
-  year++;
-  } 
+  println("Earth Position:" + bodieSystem[0].location);
+  if (bodieSystem[0].location.y < 0 && testet == 0) {
+    testet = 2;
+  }
+  if (bodieSystem[0].location.y > 0 && testet == 2) {
+    year++;
+    testet = 0;
+  }
+    
+  println("Year: " + year);
   //println(bodieSystem[2].location.toPVector().z);
-  if(monthTime > 31556926/12){
-   monthTime = monthTime - 31556926/12;
-   month++;
-  }
-  
-  if(dayTime > 86457.3315){
-   dayTime = dayTime - 86457.3315;
-   day++;
-  }
-  
-  if(hourTime > 3602.38881){
-   hourTime = hourTime - 3602.38881;
-   hour++;
-  }
-  if(month > 12){
-    month = month - 12;
-  }
-  if(hour > 24){
-    hour = hour - 24;
-  }
-  /*println("we have simulated for " + hour + " hour(by time)");
-  println("we have simulated for " + year + " years(by time)");
-  println("we have simulated for " + month + " months(by time)");
-  println("we have simulated for " + day + " days(by time)");*/
-  
-  textFont(f,16);
-  fill(255,255,255);
-  text(year + " years " + month + " months " + day + " days " + hour + " hours", 20, 20);
 }
+int testet = 0; //Needs to change name of variable and possibly change to boolean
+int year = 0; //Also needs to be moved to body class for obvious reasons
 
 void Move() {
   if (keyPressed == true && key == '4') xi+=10;
   if (keyPressed == true && key == '6') xi-=10;
   if (keyPressed == true && key == '8') yi+=10;
   if (keyPressed == true && key == '2') yi-=10;
-  /*if (keyPressed == true && keyCode == LEFT) xi+=10;
-  if (keyPressed == true && keyCode == RIGHT) xi-=10;
-  if (keyPressed == true && keyCode == UP) yi+=10;
-  if (keyPressed == true && keyCode == DOWN) yi-=10;*/
   if (keyPressed == true && key == 'b') background(0);
   if (keyPressed == true && key == '+') z+=10;
   if (keyPressed == true && key == '-') z-=10;
-  if (keyPressed == true && key == '*') animationSpeed += 50;
-  if (keyPressed == true && key == '/' && animationSpeed > 0) animationSpeed -= 50;
+  if (keyPressed == true && key == '*') {
+    animationSpeed += 50;
+  }
+  if (keyPressed == true && key == '/' && animationSpeed > 0) {
+    animationSpeed -= 50;
+  }
  }
